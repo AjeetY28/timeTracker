@@ -1,0 +1,34 @@
+-- Projects --
+
+CREATE TABLE projects (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  group_id BIGINT NOT NULL,
+  client_id BIGINT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  status ENUM('ACTIVE', 'INACTIVE', 'COMPLETED') DEFAULT 'ACTIVE',
+  start_date DATE,
+  end_date DATE,
+  budget DECIMAL(15,2),
+  budget_type ENUM('MONEY', 'HOURS') DEFAULT 'HOURS',
+  color VARCHAR(7), -- Hex color for UI representation
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+  FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE SET NULL
+ );
+
+
+-- Tasks --
+
+CREATE TABLE tasks (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  project_id BIGINT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  status ENUM('ACTIVE', 'INACTIVE', 'COMPLETED') DEFAULT 'ACTIVE',
+  estimated_hours DECIMAL(10,2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+ );

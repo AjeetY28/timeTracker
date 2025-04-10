@@ -1,0 +1,4 @@
+package com.timetracker.domain;
+
+public class BaseEntity {
+}

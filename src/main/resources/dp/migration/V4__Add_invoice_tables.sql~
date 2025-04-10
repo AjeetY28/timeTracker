@@ -1,0 +1,19 @@
+-- Invoices --
+
+ CREATE TABLE invoices (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  client_id BIGINT NOT NULL,
+  invoice_number VARCHAR(50) NOT NULL,
+  issue_date DATE NOT NULL,
+  due_date DATE NOT NULL,
+  amount DECIMAL(15,2) NOT NULL,
+  tax_amount DECIMAL(15,2) DEFAULT 0.00,
+  total_amount DECIMAL(15,2) NOT NULL,
+  status ENUM('DRAFT', 'SENT', 'PAID', 'OVERDUE', 'CANCELLED') DEFAULT 'DRAFT',
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+ );
+
+ 

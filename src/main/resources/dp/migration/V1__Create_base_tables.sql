@@ -1,0 +1,45 @@
+-- Organizations --
+
+CREATE TABLE organizations (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address TEXT,
+  contact_person VARCHAR(255),
+  contact_email VARCHAR(255),
+  contact_phone VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+ );
+
+-- Groups --
+
+CREATE TABLE groups (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  organization_id BIGINT,
+  parent_group_id BIGINT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  config JSON,
+  tracking_mode ENUM('TIME', 'PROJECTS', 'PROJECTS_TASKS') DEFAULT 'PROJECTS_TASKS',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (organization_id) REFERENCES organizations(id),
+  FOREIGN KEY (parent_group_id) REFERENCES groups(id) ON DELETE CASCADE
+ );
+
+ -- Users --
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  group_id BIGINT NOT NULL,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL, -- Stores bcrypt hash
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  role VARCHAR(50) NOT NULL DEFAULT 'USER', -- ADMIN, MANAGER, USER, etc.
+  status ENUM('ACTIVE', 'INACTIVE', 'PENDING') DEFAULT 'ACTIVE',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  last_login_at TIMESTAMP NULL,
+  FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
+ );
